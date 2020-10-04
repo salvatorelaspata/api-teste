@@ -16,7 +16,12 @@ router.get("/", (req, res) => {
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
   const spawn = require("child_process").spawn;
-  const py = spawn("python", ["read_layer.py"]);
+  const py = spawn("python", ["read_layer.py"], {
+    env: {
+      NODE_ENV: "production",
+      PATH: process.env.PATH,
+    },
+  });
   const data = ["Senza titolo-1.psd"]; //sostituire con
 
   let dataString = "";
