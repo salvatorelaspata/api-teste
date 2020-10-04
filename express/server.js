@@ -4,6 +4,7 @@ const path = require("path");
 const serverless = require("serverless-http");
 const app = express();
 const bodyParser = require("body-parser");
+const spawn = require("child_process").spawn;
 
 const router = express.Router();
 
@@ -15,7 +16,6 @@ router.get("/", (req, res) => {
 
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
-  const spawn = require("child_process").spawn;
   const py = spawn("python", ["read_layer.py"], {
     env: {
       NODE_ENV: "production",
