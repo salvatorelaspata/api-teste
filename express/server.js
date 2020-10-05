@@ -48,7 +48,7 @@ router.get("/read_components", (req, res) => {
 
   py.stdin.end();
 
-  py.stdin.write(JSON.stringify(data));
+  // py.stdin.write(JSON.stringify(data));
 
   // read(res);
 });
