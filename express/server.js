@@ -24,32 +24,35 @@ let options = {
 };
 
 router.get("/read_components", (req, res) => {
-  // const spawn = require("child_process").spawn,
-  //   py = spawn("python", ["read_layer.py", "img.psd"]);
-  // let dataString = "";
-  // py.stdout.on("data", function (data) {
-  //   dataString += data.toString();
-  // });
-  // py.stdout.on("end", function () {
-  //   if (!dataString) return;
-  //   var layer = JSON.parse(dataString);
-  //   console.log(layer);
-  //   py.stdin.pause();
-  //   py.stdin.destroy();
-  //   res.send("C SEMU!");
-  // });
-  // py.stdin.end();
-  //py.stdin.write(JSON.stringify(data));
-  read(res);
+  const spawn = require("child_process").spawn,
+    py = spawn("python", ["read_layer.py", "img.psd"], { shell: true });
+  let dataString = "";
+  py.stdout.on("data", function (data) {
+    dataString += data.toString();
+  });
+  py.stdout.on("end", function () {
+    if (!dataString) return;
+    var layer = JSON.parse(dataString);
+    console.log(layer);
+    py.stdin.pause();
+    py.stdin.destroy();
+    res.send("C SEMU!");
+  });
+  py.stdin.end();
+
+  // py.stdin.write(JSON.stringify(data));
+
+  // read(res);
 });
-const read = (res) => {
+/* const read = (res) => 
+{
   PythonShell.run("read_layer.py", options, function (err, results) {
     if (err) console.log(err);
     // results is an array consisting of messages collected during execution
     res.send(results);
     console.log("resultsssss: %j", results);
   });
-};
+}; */
 router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
 router.post("/", (req, res) => res.json({ postBody: req.body }));
 
