@@ -24,20 +24,27 @@ let options = {
 };
 
 router.get("/read_components", (req, res) => {
+  console.log("/read_components");
   const spawn = require("child_process").spawn,
-    py = spawn("python", ["read_layer.py", "img.psd"], { shell: true });
+    py = spawn("python", ["./read_layer.py", "img.psd"], { shell: true });
   let dataString = "";
   py.stdout.on("data", function (data) {
     dataString += data.toString();
+    console.log("dataString - data", dataString);
   });
   py.stdout.on("end", function () {
+    console.log("dataString - end", dataString);
     if (!dataString) return;
     var layer = JSON.parse(dataString);
+
     console.log(layer);
+
     py.stdin.pause();
     py.stdin.destroy();
-    res.send("C SEMU!");
+
+    res.send(layer);
   });
+
   py.stdin.end();
 
   // py.stdin.write(JSON.stringify(data));
@@ -61,7 +68,7 @@ app.use("/.netlify/functions/server", router); // path must route to lambda
 app.use("/", (req, res) => res.sendFile(path.join(__dirname, "../index.html")));
 
 // DEBUG
-app.listen(3000, () => console.log("Local app listening on port 3000!"));
+// app.listen(3000, () => console.log("Local app listening on port 3000!"));
 
 module.exports = app;
 module.exports.handler = serverless(app);
