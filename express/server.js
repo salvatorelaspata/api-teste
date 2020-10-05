@@ -5,13 +5,13 @@ const serverless = require("serverless-http");
 const app = express();
 const bodyParser = require("body-parser");
 
-const router = express.Router();
+/* const router = express.Router();
 
 router.get("/", (req, res) => {
   res.writeHead(200, { "Content-Type": "text/html" });
   res.write("<h1>Hello from Express.js!</h1>");
   res.end();
-});
+}); */
 
 const { PythonShell } = require("python-shell");
 
@@ -23,7 +23,7 @@ let options = {
   args: ["./img.psd"],
 };
 
-router.get("/read_components", (req, res) => {
+app.get("/read_components", (req, res) => {
   // const spawn = require("child_process").spawn,
   //   py = spawn("python", ["read_layer.py", "img.psd"]);
   // let dataString = "";
@@ -53,12 +53,12 @@ router.get("/read_components", (req, res) => {
   });
 });
 
-router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
+/* router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
 router.post("/", (req, res) => res.json({ postBody: req.body }));
 
 app.use(bodyParser.json());
 app.use("/.netlify/functions/server", router); // path must route to lambda
-app.use("/", (req, res) => res.sendFile(path.join(__dirname, "../index.html")));
+app.use("/", (req, res) => res.sendFile(path.join(__dirname, "../index.html"))); */
 
 // DEBUG
 // app.listen(3000, () => console.log("Local app listening on port 3000!"));
