@@ -12,14 +12,15 @@ router.get("/", (req, res) => {
   res.write("<h1>Hello from Express.js!</h1>");
   res.end();
 });
+
 const { PythonShell } = require("python-shell");
 
 let options = {
   mode: "text",
   pythonPath: "python",
   pythonOptions: ["-u"], // get print results in real-time
-  scriptPath: "../",
-  args: ["img.psd"],
+  scriptPath: "./",
+  args: ["./img.psd"],
 };
 
 router.get("/read_components", (req, res) => {
@@ -41,13 +42,15 @@ router.get("/read_components", (req, res) => {
   // });
 
   // py.stdin.end();
+
+  //py.stdin.write(JSON.stringify(data));
+
   PythonShell.run("read_layer.py", options, function (err, results) {
     if (err) console.log(err);
     // results is an array consisting of messages collected during execution
     res.send(results);
     console.log("resultsssss: %j", results);
   });
-  //py.stdin.write(JSON.stringify(data));
 });
 
 router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
@@ -58,7 +61,7 @@ app.use("/.netlify/functions/server", router); // path must route to lambda
 app.use("/", (req, res) => res.sendFile(path.join(__dirname, "../index.html")));
 
 // DEBUG
-app.listen(3000, () => console.log("Local app listening on port 3000!"));
+// app.listen(3000, () => console.log("Local app listening on port 3000!"));
 
 module.exports = app;
 module.exports.handler = serverless(app);
