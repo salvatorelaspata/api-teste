@@ -18,7 +18,7 @@ let options = {
   mode: "text",
   pythonPath: "python",
   pythonOptions: ["-u"], // get print results in real-time
-  scriptPath: "./",
+  scriptPath: "../",
   args: ["img.psd"],
 };
 
@@ -45,7 +45,7 @@ router.get("/read_components", (req, res) => {
     if (err) console.log(err);
     // results is an array consisting of messages collected during execution
     res.send(results);
-    console.log("results: %j", results);
+    console.log("resultsssss: %j", results);
   });
   //py.stdin.write(JSON.stringify(data));
 });
