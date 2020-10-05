@@ -49,6 +49,13 @@ router.get("/read_components", (req, res) => {
     res.send(layer);
   });
 
+  process.stdout.on("error", function (err) {
+    console.log("error", err);
+    if (err.code == "EPIPE") {
+      process.exit(0);
+    }
+  });
+
   py.stdin.write(JSON.stringify(data));
 
   py.stdin.end();
