@@ -32,10 +32,12 @@ router.get("/read_components", (req, res) => {
   console.log(py);
 
   let dataString = "";
+
   py.stdout.on("data", function (data) {
     dataString += data.toString();
     console.log("dataString - data", dataString);
   });
+
   py.stdout.on("end", function () {
     console.log("dataString - end", dataString);
     if (!dataString) return;
