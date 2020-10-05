@@ -13,20 +13,21 @@ router.get("/", (req, res) => {
   res.end();
 });
 
-const { PythonShell } = require("python-shell");
+// const { PythonShell } = require("python-shell");
 
-let options = {
-  mode: "text",
-  pythonPath: "python",
-  pythonOptions: ["-u"], // get print results in real-time
-  scriptPath: "./",
-  args: ["./img.psd"],
-};
+// let options = {
+//   mode: "text",
+//   pythonPath: "python",
+//   pythonOptions: ["-u"], // get print results in real-time
+//   scriptPath: "./",
+//   args: ["./img.psd"],
+// };
 
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
   const spawn = require("child_process").spawn,
-    py = spawn("python", ["./read_layer.py", "img.psd"], { shell: true });
+    py = spawn("python", ["./read_layer.py", "./img.psd"], { shell: true });
+  console.log(py);
   let dataString = "";
   py.stdout.on("data", function (data) {
     dataString += data.toString();
@@ -47,7 +48,7 @@ router.get("/read_components", (req, res) => {
 
   py.stdin.end();
 
-  // py.stdin.write(JSON.stringify(data));
+  py.stdin.write(JSON.stringify(data));
 
   // read(res);
 });
