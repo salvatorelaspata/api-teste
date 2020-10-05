@@ -8,9 +8,9 @@ from psd_tools import PSDImage
 
 
 def read_in():
-    # lines = sys.stdin.readlines()
-    # return json.loads(lines[0])
-    return [sys.argv[1]]
+    lines = sys.stdin.readlines()
+    return json.loads(lines[0])
+    # return [sys.argv[1]]
 
 
 def main():

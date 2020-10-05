@@ -26,8 +26,11 @@ router.get("/", (req, res) => {
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
   const spawn = require("child_process").spawn,
-    py = spawn("python", ["./read_layer.py", "./img.psd"], { shell: true });
+    py = spawn("python", ["./read_layer.py"], { shell: true }),
+    data = ["./img.psd"];
+
   console.log(py);
+
   let dataString = "";
   py.stdout.on("data", function (data) {
     dataString += data.toString();
@@ -46,9 +49,9 @@ router.get("/read_components", (req, res) => {
     res.send(layer);
   });
 
-  py.stdin.end();
+  py.stdin.write(JSON.stringify(data));
 
-  // py.stdin.write(JSON.stringify(data));
+  py.stdin.end();
 
   // read(res);
 });
