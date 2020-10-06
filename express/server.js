@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
   const spawn = require("child_process").spawn,
-    py = spawn("python", ["./read_layer.py"], { shell: true }),
+    py = spawn("python", ["--version"], { shell: true }),
     data = ["./img.psd"];
 
   console.log(py);
@@ -41,14 +41,14 @@ router.get("/read_components", (req, res) => {
   py.stdout.on("end", function () {
     console.log("dataString - end", dataString);
     if (!dataString) return;
-    var layer = JSON.parse(dataString);
+    /* var layer = JSON.parse(dataString);
 
     console.log(layer);
-
+ */
     py.stdin.pause();
     py.stdin.destroy();
 
-    res.send(layer);
+    res.send(dataString);
   });
 
   py.stdout.on("error", function (err) {
@@ -58,13 +58,14 @@ router.get("/read_components", (req, res) => {
     }
   });
 
-  py.stdin.write(JSON.stringify(data));
+  //py.stdin.write(JSON.stringify(data));
 
   py.stdin.end();
 
   // read(res);
 });
-/* const read = (res) => 
+/*
+const read = (res) => 
 {
   PythonShell.run("read_layer.py", options, function (err, results) {
     if (err) console.log(err);
@@ -72,7 +73,8 @@ router.get("/read_components", (req, res) => {
     res.send(results);
     console.log("resultsssss: %j", results);
   });
-}; */
+}; 
+*/
 router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
 router.post("/", (req, res) => res.json({ postBody: req.body }));
 
