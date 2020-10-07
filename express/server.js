@@ -25,42 +25,65 @@ router.get("/", (req, res) => {
 
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
-  const spawn = require("child_process").spawn,
-    py = spawn("python2.7", ["--version"]),
-    data = ["./img.psd"];
+  var dataToSend;
+  // inspect the PATH key on the env object
+  console.log(process.env.PATH);
 
-  //console.log(py);
-
-  let dataString = "";
-
-  py.stdout.on("data", function (data) {
-    dataString += data.toString();
-    console.log("dataString - data", dataString);
+  const python = spawn('python3', ['--version']);
+  // collect data from script
+  python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+    dataToSend = data.toString();
+  });
+  // in close event we are sure that stream from child process is closed
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    res.send(dataToSend)
   });
 
-  py.stdout.on("end", function () {
-    console.log("dataString - end", dataString);
-    if (!dataString) return;
-    /* var layer = JSON.parse(dataString);
-
-    console.log(layer);
- */
-    py.stdin.pause();
-    py.stdin.destroy();
-
-    res.send(dataString);
+  python.on('error', (code) => {
+    console.log(`ERRORRRRRRR ${code}`);
+    // send data to browser
+    res.send(code)
   });
+});
+//   const spawn = require("child_process").spawn,
+//     py = spawn("python2.7", ["--version"]),
+//     data = ["./img.psd"];
 
-  py.stdout.on("error", function (err) {
-    console.log("error", err);
-    if (err.code == "EPIPE") {
-      py.exit(0);
-    }
-  });
+//   //console.log(py);
 
-  //py.stdin.write(JSON.stringify(data));
+//   let dataString = "";
 
-  py.stdin.end();
+//   py.stdout.on("data", function (data) {
+//     dataString += data.toString();
+//     console.log("dataString - data", dataString);
+//   });
+
+//   py.stdout.on("end", function () {
+//     console.log("dataString - end", dataString);
+//     if (!dataString) return;
+//     /* var layer = JSON.parse(dataString);
+
+//     console.log(layer);
+//  */
+//     py.stdin.pause();
+//     py.stdin.destroy();
+
+//     res.send(dataString);
+//   });
+
+//   py.stdout.on("error", function (err) {
+//     console.log("error", err);
+//     if (err.code == "EPIPE") {
+//       py.exit(0);
+//     }
+//   });
+
+//   //py.stdin.write(JSON.stringify(data));
+
+//   py.stdin.end();
 
   // read(res);
 });
