@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
 router.get("/read_components", (req, res) => {
   console.log("/read_components");
   const spawn = require("child_process").spawn,
-    py = spawn("python3", ["--version"], { shell: true }),
+    py = spawn("python2.7", ["--version"]),
     data = ["./img.psd"];
 
   //console.log(py);
