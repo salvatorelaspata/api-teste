@@ -25,12 +25,24 @@ router.get("/", (req, res) => {
 // };
 
 router.get("/read_components", (req, res) => {
+  (function () {
+    var childProcess = require("child_process");
+    var oldSpawn = childProcess.spawn;
+    function mySpawn() {
+      console.log("spawn called");
+      console.log(arguments);
+      var result = oldSpawn.apply(this, arguments);
+      return result;
+    }
+    childProcess.spawn = mySpawn;
+  })();
+
   console.log("/read_components");
   var dataToSend;
   // inspect the PATH key on the env object
   console.log(process.env.PATH);
 
-  const python = spawn("python3", ["--version"]);
+  const python = spawn("python", ["--version"]);
   // collect data from script
   python.stdout.on("data", function (data) {
     console.log("Pipe data from python script ...");
@@ -141,6 +153,7 @@ router.get("/read_components3", (req, res) => {
 });
 
 /*
+
 const read = (res) => 
 {
   PythonShell.run("read_layer.py", options, function (err, results) {
@@ -150,6 +163,7 @@ const read = (res) =>
     console.log("resultsssss: %j", results);
   });
 }; 
+
 */
 router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
 router.post("/", (req, res) => res.json({ postBody: req.body }));
