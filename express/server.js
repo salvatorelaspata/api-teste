@@ -23,20 +23,19 @@ router.get("/", (req, res) => {
 //   scriptPath: "./",
 //   args: ["./img.psd"],
 // };
+(function () {
+  var childProcess = require("child_process");
+  var oldSpawn = childProcess.spawn;
+  function mySpawn() {
+    console.log("spawn called");
+    console.log(arguments);
+    var result = oldSpawn.apply(this, arguments);
+    return result;
+  }
+  childProcess.spawn = mySpawn;
+})();
 
 router.get("/read_components", (req, res) => {
-  (function () {
-    var childProcess = require("child_process");
-    var oldSpawn = childProcess.spawn;
-    function mySpawn() {
-      console.log("spawn called");
-      console.log(arguments);
-      var result = oldSpawn.apply(this, arguments);
-      return result;
-    }
-    childProcess.spawn = mySpawn;
-  })();
-
   console.log("/read_components");
   var dataToSend;
   // inspect the PATH key on the env object
